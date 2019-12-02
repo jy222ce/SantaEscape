@@ -190,17 +190,22 @@ Item.member('isHanded', function () {
 
 
 
-//시작
-
+// 방 구성
 Minigame = new Room('Minigame', '밤하늘.png')
 Town = new Room('Town', '마을.png')
 Livingroom = new Room('Livingroom', '거실.png')
+//parent_room = new Room('parent_room', 'baby_background.jpg')  // 부모님방 - 배경파일 수정할 것
 kid_room = new Room('kid_room', 'baby_background.jpg')
-parent_room = new Room('parent_room', 'baby_background.jpg')  // 부모님방 - 배경파일 수정할 것
+outside = new Room('outside', '밤하늘.png')
 
 
 
-/*      썰매타고 밤 하늘 이동하기      */
+
+
+
+
+
+/*            Miniagame            */
 var santaX = 250
 var santaY = 170
 var i = 0
@@ -221,11 +226,13 @@ Minigame.button.onClick = function () {
 
 
 
-// 제한 시간 내에 화살표 버튼을 연속으로 눌러서 썰매를 오른쪽 끝까지 움직이면 마을로 이동하는 기능 필요
-// 현재는 화살표 누르면 바로 이동
 
 
-/*     마을에서 집 고르기     */
+
+
+
+
+/*            Town           */
 Town.house1 = new Object(Town, 'house1', '집_1.png')
 Town.house1.resize(150)
 Town.house1.locate(500, 400)
@@ -270,16 +277,22 @@ Town.door1.onClick = function () {
 
 
 
-/*     그레이스의 집      */
+
+
+
+
+
+
+/*           Livingroom            */
 Livingroom.setRoomLight(0.8) // 방 밝기 
 
 Livingroom.door1 = new Door(Livingroom, 'door1', 'close door-left.png', 'open door-left.png', kid_room)
 Livingroom.door1.resize(190)
-Livingroom.door1.locate(180, 160)
+Livingroom.door1.locate(180, 210)
 
 Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', parent_room)
 Livingroom.door2.resize(190)
-Livingroom.door2.locate(1100, 160)
+Livingroom.door2.locate(1100, 210)
 Livingroom.door2.lock()
 
 Livingroom.door2.onClick = function () { // door를 클릭했을 때
@@ -375,21 +388,21 @@ Livingroom.tool8.resize(100)
 Livingroom.tool8.locate(1050, 600)
 
 
-// /*     트리      */
-// Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
-// Livingroom.tree.resize(350)
-// Livingroom.tree.locate(800, 300)
+ /*     트리      */
+ Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
+ Livingroom.tree.resize(350)
+ Livingroom.tree.locate(800, 300)
 
 
-// /*     풀     */
-// Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
-// Livingroom.grass.resize(50)
-// Livingroom.grass.locate(800, 280)
-// Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
-// Livingroom.grass.onClick = function () {
-//     printMessage("이 풀은 뭐지?")
-//     Livingroom.grass.pick()
-// }
+ /*     풀     */
+ Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
+ Livingroom.grass.resize(50)
+ Livingroom.grass.locate(800, 280)
+ Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
+ Livingroom.grass.onClick = function () {
+     printMessage("이 풀은 뭐지?")
+     Livingroom.grass.pick()
+ }
 
 // // 트리 장식들을 트리로 드래그해서 꾸밀 수 있는 기능 필요
 
@@ -410,7 +423,13 @@ Livingroom.tool8.locate(1050, 600)
 
 
 
-/*      아이방      */
+
+
+
+
+
+
+/*           kid_room           */
 kid_room.setRoomLight(0.8)
 
 kid_room.door = new Door(kid_room, 'door', 'close door-left.png', 'open door-left.png', Livingroom)
@@ -571,9 +590,7 @@ kid_room.treasureChest.onClick = function () {
 
 
 
-/*      창 밖        */
-outside = new Room('outside', '밤하늘.png')
-
+/*          outside          */
 outside.arrow = new Object(outside, 'arrow', 'down_arrow.png')
 outside.arrow.resize(100)
 outside.arrow.locate(640, 650)
@@ -616,4 +633,6 @@ outside.rudolph2.onClick = function () {
 
 
 
+
+// 게임 시작
 Game.start(Livingroom, "방탈출에 오신 것을 환영합니다!")
