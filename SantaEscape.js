@@ -194,18 +194,45 @@ Item.member('isHanded', function () {
 Minigame = new Room('Minigame', '밤하늘.png')
 Town = new Room('Town', '마을.png')
 Livingroom = new Room('Livingroom', '거실.png')
-//parent_room = new Room('parent_room', 'baby_background.jpg')  // 부모님방 - 배경파일 수정할 것
+bedroom = new Room('bedroom', 'bedroomwall.png')  
 kid_room = new Room('kid_room', 'baby_background.jpg')
 outside = new Room('outside', '밤하늘.png')
+choiceroom = new Room('choiceroom', 'bedroomwalladd.png')
+choiceroom1=new Room('choiceroom1','bedroomwall.png')
+choiceroom2=new Room('choiceroom2','bedroomwall.png')
+startroom = new Room('startroom', 'startpage.png')
 
 
 
 
+/*  startroom */
+playSound('start.wav')
+
+startroom.door1 = new Door(startroom, 'door1', 'startbutton.png', 'startbutton.png', Minigame)
+startroom.door1.resize(130)
+startroom.door1.locate(640, 590)
+
+
+startroom.door1.onClick = function(){
+	if (!this.id.isLocked() && this.id.isClosed()){
+		this.id.open()
+	}
+	else if(this.id.isLocked()){
+		printMessage("문이 잠겨있다.")
+	}
+	else if (this.id.isOpened()){
+		if (this.connectedTo !== undefined){
+			Game.move(this.connectedTo)
+		}
+		else {
+			Game.end()
+		}
+	}
+}
 
 
 
-
-/*            Miniagame            */
+/*            Minigame            */
 var santaX = 250
 var santaY = 170
 var i = 0
@@ -290,23 +317,23 @@ Livingroom.door1 = new Door(Livingroom, 'door1', 'close door-left.png', 'open do
 Livingroom.door1.resize(190)
 Livingroom.door1.locate(180, 210)
 
-Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', parent_room)
+Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', bedroom)
 Livingroom.door2.resize(190)
 Livingroom.door2.locate(1100, 210)
-Livingroom.door2.lock()
+/*Livingroom.door2.lock() 나중에 다시 lock걸기!!
 
 Livingroom.door2.onClick = function () { // door를 클릭했을 때
     if (Livingroom.key.isHanded() && this.id.isClosed()) {
         this.id.open() // key를 사용해서 door의 상태를 open으로 바꿈
     }
     else if (this.id.isOpened()) { // door가 opened 상태이면
-        game.move(parent_room) // 부모님방으로 이동
+        game.move(bedroom) // 부모님방으로 이동
     }
     else if (this.id.isLocked()) { // door가 locked 상태이면
         printMessage("잠겨있다") // 메시지 출력
     }
 }
-
+*/
 
 
 /*   열쇠   */
@@ -632,7 +659,147 @@ outside.rudolph2.onClick = function () {
 
 
 
+/* bedroom */
+//부모님방 bedroom
+bedroom.door1 = new Door(bedroom, 'door1', 'doorlock.png', 'dooropen.png', Livingroom)
+bedroom.door1.resize(230)
+bedroom.door1.locate(1040, 218)
+
+bedroom.window = new Object(bedroom, 'window', 'snowwindow.png')
+bedroom.window.resize(450)
+bedroom.window.locate(640, 210)
+bedroom.window.onClick = function () {
+	printMessage("밖에는 눈이 펑펑 오고있다.")
+}
+
+bedroom.carpet = new Object(bedroom, 'carpet', '카펫1.png')
+bedroom.carpet.resize(700)
+bedroom.carpet.locate(640, 550)
+bedroom.carpet.onClick = function () {
+    printMessage("카펫 밑에는 아무것도 없다.")
+}
+
+bedroom.bed=new Door (bedroom,'bed','bed_bedroom.png','bed_bedroom.png',choiceroom)
+bedroom.bed.resize(450)
+bedroom.bed.locate(640, 380)
+
+
+bedroom.shelf=new Object(bedroom,'shelf','shelf.png')
+bedroom.shelf.resize(250)
+bedroom.shelf.locate(240,280)
+bedroom.shelf.onClick=function(){
+    printMessage("딱히 재미있어 보이는 책이 없다.")
+}
+
+bedroom.candycane = new Object(bedroom, 'candycane', 'candycane.png')
+bedroom.candycane.resize(120)
+bedroom.candycane.locate(100, 315)
+bedroom.candycane.onClick = function () {
+    printMessage("무시무시한 지팡이 사탕이다. 무기로 딱이군.")
+    bedroom.candycane.pick()
+}
+
+bedroom.clock=new Object(bedroom,'clock','clock_bedroom.png')
+bedroom.clock.resize(130)
+bedroom.clock.locate(235,105)
+bedroom.clock.onClick=function(){
+	printMessage("서두르자!!")
+}
+
+bedroom.telescope=new Item(bedroom,'telescope','telescope.png')
+bedroom.telescope.resize(200)
+bedroom.telescope.locate(700,500)
+bedroom.telescope.hide()
+bedroom.telescope.setDescription(" 망원경이다.")
+
+bedroom.hat = new Item(bedroom, 'hat', 'santahat.png')
+bedroom.hat.resize(60)
+bedroom.hat.locate(215,250)
+bedroom.hat.onClick = function () {
+    printMessage("아니 이건 내 모자인데...? 작년에 두고갔나...? 일단 챙겨보자.")
+    bedroom.hat.pick()
+}
+
+
+var telescope=0
+bedroom.snowman=new Object(bedroom,'snowman','snowman.png')
+bedroom.snowman.resize(200)
+bedroom.snowman.locate(700,500)
+
+bedroom.snowman.onClick=function(){
+	if(!telescope){
+        printMessage("아이가 만든 눈사람인가? 안에 뭐가 들어있는것 같다.")
+        }
+    if(bedroom.hat.isHanded()){
+        printMessage("눈사람이 너무 따뜻해져서 녹았다!")
+        bedroom.snowman.hide()
+        bedroom.telescope.show()
+        telescope=1
+        }
+    else{
+        printMessage("왜 눈사람이 녹지 않았지?")
+    }
+}
+
+
+
+
+//선택지 방 choiceroom (bedroom과 연결됨)
+choiceroom.text=new Object(choiceroom,'text','text.png')
+choiceroom.text.resize(600)
+choiceroom.text.locate(640,150)
+
+choiceroom.choice1 = new Object(choiceroom, 'choice1', 'choice1.png')
+choiceroom.choice1.resize(500)
+choiceroom.choice1.locate(640,300)
+choiceroom.choice1.onClick = function() {
+	Game.move(choiceroom1)
+	game.setTimer(5, 1, "초")
+	playSound('scream.wav')
+}
+
+choiceroom.choice2 = new Object(choiceroom, 'choice2', 'choice2.png')
+choiceroom.choice2.resize(500)
+choiceroom.choice2.locate(640,400)
+choiceroom.choice2.onClick = function() {
+	Game.move(choiceroom2)
+	game.setTimer(5, 1, "초")
+	playSound('police.wav')
+}
+
+choiceroom.choice3 = new Object(choiceroom, 'choice3', 'choice3.png')
+choiceroom.choice3.resize(500)
+choiceroom.choice3.locate(640,500)
+choiceroom.choice3.onClick = function() {
+	Game.move(bedroom)
+	printMessage('사탕으로 부모님을 기절시키는데 성공했다!')
+}
+
+
+//선택지방1
+choiceroom1.santa=new Object(choiceroom1,'santa','cryingsanta.png')
+choiceroom1.santa.resize(400)
+choiceroom1.santa.locate(640,450)
+
+choiceroom1.text1=new Object(choiceroom1,'text1','choiceroom1.png')
+choiceroom1.text1.resize(500)
+choiceroom1.text1.locate(640,200)
+
+//선택지방2
+choiceroom2.police=new Object(choiceroom2,'police','policecar.png')
+choiceroom2.police.resize(600)
+choiceroom2.police.locate(640,450)
+
+choiceroom2.text2=new Object(choiceroom2,'text2','choiceroom2.png')
+choiceroom2.text2.resize(500)
+choiceroom2.text2.locate(640,200)
+
+//선택지방3
+
+
+
+
 
 
 // 게임 시작
-Game.start(Livingroom, "방탈출에 오신 것을 환영합니다!")
+Game.start(Livingroom, "Merry Christmas!")
