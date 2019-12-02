@@ -189,7 +189,7 @@ Item.member('isHanded', function () {
 
 
 
-/*      썰매타고 밤 하늘 이동하기      */
+
 Minigame = new Room('Minigame', '밤하늘.png')
 Town = new Room('Town', '마을.png')
 Livingroom = new Room('Livingroom', '거실.png')
@@ -197,6 +197,8 @@ kid_room = new Room('kid_room', 'baby_background.jpg') // 아이방
 parent_room = new Room('parent_room', 'baby_background.jpg')  // 부모님방 - 배경파일 수정할 것
 
 
+
+/*      썰매타고 밤 하늘 이동하기      */
 Minigame.santa = new Object(Minigame, 'santa', '산타썰매.png')
 Minigame.santa.resize(300)  
 Minigame.santa.locate(250, 150) 
@@ -259,7 +261,7 @@ Town.door1.onClick = function() {
 	else if (this.id.isOpened()) {
 		if (this.connectedTo !== undefined) {
 			Game.move(this.connectedTo)
-			printMessage('무사히 그레이스의 집으로 잠입했다') 
+			printMessage("무사히 그레이스의 집에 도착했다!") 
 		} 
 		else {
 			Game.end()
@@ -321,20 +323,20 @@ Livingroom.sofa.onClick = function () {
 
 // 드래그 모션 direction - Up, Down, Left, Right
 
-Livingroom.sofa.onDrag = function (direction) {
-    if (direction == "Right" && Livingroom.sofa.move) {
-	printMessage("소파에 뭔가 있다")
-	Livingroom.sofa.moveX(100)
-	Livingroom.sofa.moveY(-40)
-	Livingroom.sofa.move = false // 이후에는 더 이상 움직이지 않도록 함
-	Livingroom.key.show()  // 열쇠 발견
-    }
-}
+//Livingroom.sofa.onDrag = function (direction) {
+//    if (direction == "Right" && Livingroom.sofa.move) {
+//	printMessage("소파에 뭔가 있다")
+//	Livingroom.sofa.moveX(100)
+//	Livingroom.sofa.moveY(-40)
+//	Livingroom.sofa.move = false // 이후에는 더 이상 움직이지 않도록 함
+//	Livingroom.key.show()  // 열쇠 발견
+//    }
+//}
 
-Livingroom.key.onClick = function () {
-    printMessage("열쇠를 얻었다")
-    Livingroom.key.pick()
-}
+//Livingroom.key.onClick = function () {
+//    printMessage("열쇠를 얻었다")
+//    Livingroom.key.pick()
+//}
 
 // 소파를 오른쪽으로 밀어서 바닥에 있는 열쇠를 발견하고, 그걸로 부모님 방을 여는 설정을 넣고 싶었는데
 // 동작이 안 되네요.....
