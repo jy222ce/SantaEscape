@@ -23,6 +23,9 @@ Game.move = function (room) {
 Game.handItem = function () {
     return game.getHandItem()
 }
+Game.combination = function (object1, object2, object3) {
+    game.makeCombination(object1.id, object2.id, object3.id)
+}
 
 //////// Room Definition
 
@@ -185,17 +188,33 @@ Item.member('isHanded', function () {
 })
 
 
+////////// Decoration Definition
+
+//function Decoration(room, name, image) {
+//    Object.call(this, room, name, image)
+//}
+//// inherited from Object
+//Decoration.prototype = new Object()
+
+//Decoration.member('onClick', function () {
+//    printMessage("트리 장식이다.")
+//})
+//Decoration.member('onDrag', function (x, y) {
+//    if (direction == "Right") {
+//        this.id.locate(x, y)
+//    }
+//})
+
 
 
 
 
 
 // 방 구성
-Minigame = new Room('Minigame', '밤하늘.png')
-Town = new Room('Town', '마을.png')
 Livingroom = new Room('Livingroom', '거실.png')
 bedroom = new Room('bedroom', 'bedroomwall.png')  
 kid_room = new Room('kid_room', 'baby_background.jpg')
+parent_room = new Room('parent_room', '거실.png')
 outside = new Room('outside', '밤하늘.png')
 choiceroom = new Room('choiceroom', 'bedroomwalladd.png')
 choiceroom1=new Room('choiceroom1','bedroomwall.png')
@@ -232,7 +251,9 @@ startroom.door1.onClick = function(){
 
 
 
-/*            Minigame            */
+
+/*            Miniagame            */
+Minigame = new Room('Minigame', '밤하늘.png')
 var santaX = 250
 var santaY = 170
 var i = 0
@@ -260,6 +281,7 @@ Minigame.button.onClick = function () {
 
 
 /*            Town           */
+Town = new Room('Town', '마을.png')
 Town.house1 = new Object(Town, 'house1', '집_1.png')
 Town.house1.resize(150)
 Town.house1.locate(500, 400)
@@ -311,6 +333,7 @@ Town.door1.onClick = function () {
 
 
 /*           Livingroom            */
+//Livingroom = new Room('Livingroom', '거실.png')
 Livingroom.setRoomLight(0.8) // 방 밝기 
 
 Livingroom.door1 = new Door(Livingroom, 'door1', 'close door-left.png', 'open door-left.png', kid_room)
@@ -353,8 +376,7 @@ Livingroom.fireplace.locate(550, 280)
 
 /*      소파      */
 Livingroom.sofa = new Object(Livingroom, 'sofa', '소파.png')
-Livingroom.sofa.resize(500)
-
+Livingroom.sofa.resize(450)
 Livingroom.sofa.locate(400, 430)
 Livingroom.sofa.onClick = function () {
     printMessage("안락한 느낌의 소파다")
@@ -377,59 +399,65 @@ Livingroom.key.onClick = function () {
     Livingroom.key.pick()
 }
 
-// 소파를 오른쪽으로 밀어서 바닥에 있는 열쇠를 발견하고, 그걸로 부모님 방을 여는 설정을 넣고 싶었는데
-// 동작이 안 되네요.....
+
+ /*     트리 장식     */
+ Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
+ Livingroom.tool1.resize(100)
+ Livingroom.tool1.locate(350, 600)
+
+ Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
+ Livingroom.tool2.resize(100)
+ Livingroom.tool2.locate(450, 620)
+
+ Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
+ Livingroom.tool3.resize(100)
+ Livingroom.tool3.locate(750, 600)
+
+ Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
+ Livingroom.tool4.resize(100)
+ Livingroom.tool4.locate(850, 600)
+
+ Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
+ Livingroom.tool5.resize(70)
+ Livingroom.tool5.locate(950, 550)
+
+ Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
+ Livingroom.tool6.resize(100)
+ Livingroom.tool6.locate(1050, 500)
+
+ Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
+ Livingroom.tool7.resize(100)
+ Livingroom.tool7.locate(550, 600)
 
 
-/*     트리 장식     */
-Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
-Livingroom.tool1.resize(100)
-Livingroom.tool1.locate(350, 600)
-
-Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
-Livingroom.tool2.resize(100)
-Livingroom.tool2.locate(450, 620)
-
-Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
-Livingroom.tool3.resize(100)
-Livingroom.tool3.locate(750, 600)
-
-Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
-Livingroom.tool4.resize(100)
-Livingroom.tool4.locate(850, 600)
-
-Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
-Livingroom.tool5.resize(70)
-Livingroom.tool5.locate(950, 550)
-
-Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
-Livingroom.tool6.resize(100)
-Livingroom.tool6.locate(1050, 500)
-
-Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
-Livingroom.tool7.resize(100)
-Livingroom.tool7.locate(550, 600)
-
-Livingroom.tool8 = new Object(Livingroom, 'tool8', '장식8.png')
-Livingroom.tool8.resize(100)
-Livingroom.tool8.locate(1050, 600)
 
 
  /*     트리      */
- Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
- Livingroom.tree.resize(350)
- Livingroom.tree.locate(800, 300)
+var tree_grass = true
+Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
+Livingroom.tree.resize(400)
+Livingroom.tree.locate(820, 300)
+Livingroom.tree.onDrag = function (direction) {
+    if (direction == "Right" && tree_grass) {
+        printMessage("트리를 뜯었다!")
+        Livingroom.grass.show()
+    }
+}
+Livingroom.tree.onClick = function () {
+    printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
+}
 
 
  /*     풀     */
- Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
- Livingroom.grass.resize(50)
- Livingroom.grass.locate(800, 280)
- Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
- Livingroom.grass.onClick = function () {
-     printMessage("이 풀은 뭐지?")
-     Livingroom.grass.pick()
- }
+Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
+Livingroom.grass.resize(50)
+Livingroom.grass.locate(920, 280)
+Livingroom.grass.hide()
+Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
+Livingroom.grass.onClick = function () {
+    printMessage("풀을 얻었다.")
+    Livingroom.grass.pick()
+}
 
 // // 트리 장식들을 트리로 드래그해서 꾸밀 수 있는 기능 필요
 
@@ -531,6 +559,10 @@ kid_room.treasureChestKey = new Item(kid_room, 'treasureChestKey', 'Treasure Che
 kid_room.treasureChestKey.resize(30)
 kid_room.treasureChestKey.locate(851, 93)
 kid_room.treasureChestKey.hide()
+kid_room.treasureChestKey.onClick = function () {
+    printMessage("장난감 열쇠를 얻었다.")
+    kid_room.treasureChestKey.pick()
+}
 kid_room.treasureChestKey.setDescription("장난감 열쇠다.")
 
 kid_room.books1 = new Object(kid_room, 'books1', 'books1.png')
@@ -595,19 +627,34 @@ kid_room.treasureChest.lock()
 kid_room.treasureChest.onClick = function () {
     if (!treasure) {
         if (kid_room.treasureChest.isLocked()) {
-            printMessage("보물상자다. 잠겨있다.")
+            printMessage("[ 그레이스의 보물상자 ]\n 잠겨있다.")
         }
         if (kid_room.treasureChestKey.isHanded()) {
             playSound("locking-keyed-padlock.wav")
-            printMessage("보물상자가 열렸다.")
+            printMessage("보물상자가 열렸다! 뭔가 들어있다.")
             kid_room.treasureChest.setSprite('Opened Treasure Chest.png')
             kid_room.treasureChest.unlock()
             treasure = 1
+            kid_room.cutted_star.show()
         }
     }
     else {
-        printMessage("뭔가 들어있다.")
+        printMessage("[ 그레이스의 보물상자 ]")
     }
+}
+
+kid_room.star = new Object(kid_room, 'star', '장식8.png')
+kid_room.star.hide()
+kid_room.star.setDescription("트리 장식이다.")
+
+kid_room.cutted_star = new Object(kid_room, 'cutted_star', 'cutted star.png')
+kid_room.cutted_star.resize(50)
+kid_room.cutted_star.locate(580, 310)
+kid_room.cutted_star.hide()
+kid_room.cutted_star.onClick = function () {
+    printMessage("별을 얻었다.")
+    kid_room.cutted_star.hide()
+    kid_room.star.pick()
 }
 
 
@@ -625,13 +672,8 @@ outside.arrow.onClick = function () {
     Game.move(kid_room)
 }
 
-// 거실 트리 뜯으면 얻을 수 있게끔
-outside.grass = new Item(outside, 'grass', 'grass.png')
-outside.grass.locate(500, 500)
-outside.grass.setDescription("루돌프들이 좋아하는 풀이다.")
-//
-
 // 작은 루돌프
+var clear = 0
 outside.rudolph1 = new Object(outside, 'rudolph1', '루돌프_썰매.png')
 outside.rudolph1.resize(80)
 outside.rudolph1.locate(900, 120)
@@ -644,7 +686,7 @@ outside.rudolph2.hide()
 
 outside.rudolph1.onClick = function () {
     printMessage("오라고 하니까 고개를 흔든다. 무임승차는 안 된다는 건가...")
-    if (outside.grass.isHanded()) {
+    if (Livingroom.grass.isHanded()) {
         printMessage("풀을 보여줬더니 루돌프들이 왔다!")
         outside.rudolph1.hide()
         outside.rudolph2.show()
@@ -659,7 +701,7 @@ outside.rudolph2.onClick = function () {
 
 
 
-/* bedroom */
+/*        bedroom         */
 //부모님방 bedroom
 bedroom.door1 = new Door(bedroom, 'door1', 'doorlock.png', 'dooropen.png', Livingroom)
 bedroom.door1.resize(230)
