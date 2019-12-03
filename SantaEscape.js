@@ -207,7 +207,6 @@ SantaRoom = new Room('SantaRoom', 'brick.jpg')
 SantaRoom2 = new Room('SantaRoom2', 'brick.jpg')
 DeskView = new Room('DeskView', 'desk_background.png')
 BearEnding = new Room('BearEnding', 'bearending.png')
-Minigame = new Room('Minigame', '밤하늘.png')
 
 
 
@@ -520,10 +519,11 @@ Minigame.button.onClick = function () {
     game.setGameoverMessage("너무 늦어서 12월 26일이 되어버렸다...")
     }
     else {
-        i += 15
+        i += 20
         Minigame.santa.locate(santaX + i, santaY)
         if (Minigame.santa.getX() > 1280) {
             Game.move(Town)
+            game.hideTimer()
         }
     }
 }
