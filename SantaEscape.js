@@ -220,43 +220,309 @@ choiceroom = new Room('choiceroom', 'bedroomwalladd.png')
 choiceroom1=new Room('choiceroom1','bedroomwall.png')
 choiceroom2=new Room('choiceroom2','bedroomwall.png')
 startroom = new Room('startroom', 'startpage.png')
-
+SantaRoom = new Room('SantaRoom', 'brick.jpg')
+SantaRoom2 = new Room('SantaRoom2', 'brick.jpg')
+DeskView = new Room('DeskView', 'desk_background.png')
+BearEnding = new Room('BearEnding', 'bearending.png')
+Minigame = new Room('Minigame', '밤하늘.png')
 
 
 
 /*  startroom */
 playSound('start.wav')
 
-startroom.door1 = new Door(startroom, 'door1', 'startbutton.png', 'startbutton.png', Minigame)
+startroom.door1 = new Door(startroom, 'door1', 'startbutton.png', 'startbutton.png', SantaRoom)
 startroom.door1.resize(130)
 startroom.door1.locate(640, 590)
 
 
 startroom.door1.onClick = function(){
-	if (!this.id.isLocked() && this.id.isClosed()){
-		this.id.open()
-	}
-	else if(this.id.isLocked()){
-		printMessage("문이 잠겨있다.")
-	}
-	else if (this.id.isOpened()){
-		if (this.connectedTo !== undefined){
-			Game.move(this.connectedTo)
-		}
-		else {
-			Game.end()
-		}
-	}
+	Game.move(this.connectedTo)
+}
+
+SantaRoom.next =new Object(SantaRoom, 'next', 'next.png') //책장
+SantaRoom.next.resize(90)
+SantaRoom.next.locate(1250, 340)
+SantaRoom.next.lock()
+SantaRoom.next.onClick = function() { 
+	if(SantaRoom.next.isClosed()){
+		Game.move(SantaRoom2)
+	} else if (SantaRoom.next.isLocked()){
+		printMessage("아직 만들어야 할 선물이 남아있다.")
+	} 
+}
+
+SantaRoom.bookshelf =new Object(SantaRoom, 'bookshelf', 'bookshelf_SantaRoom.png') //책장
+SantaRoom.bookshelf.resize(260)
+SantaRoom.bookshelf.locate(1100, 270)
+
+SantaRoom.window =new Object(SantaRoom, 'window', 'window_SantaRoom.png') //창문
+SantaRoom.window.resize(280)
+SantaRoom.window.locate(750, 140)
+SantaRoom.window.onClick = function(){
+	printMessage("화이트 크리스마스!")
 }
 
 
 
+SantaRoom.post =new Object(SantaRoom, 'post', 'post1.png') //편지
+SantaRoom.post.resize(60)
+SantaRoom.post.locate(480, 620)
+SantaRoom.post.hide()
+SantaRoom.post.onClick = function(){
+	SantaRoom.post.pick()
+	printMessage("편지를 열어보자")
+	SantaRoom.desk.unlock()
+}
+
+SantaRoom.post2 =new Object(SantaRoom, 'post2', 'letter_SantaRoom.png')
+SantaRoom.post2.hide()
+SantaRoom.post3 =new Object(SantaRoom, 'post3', 'letter2_SantaRoom.png')
+SantaRoom.post3.hide()
+
+var box = 0
+SantaRoom.postbox =new Object(SantaRoom, 'postbox', 'postbox_SantaRoom.png') //우편함
+SantaRoom.postbox.resize(80)
+SantaRoom.postbox.locate(520, 120)
+SantaRoom.postbox.onClick = function(){
+	if (box == 0){
+		printMessage("앗, 뭔가가 떨어졌다.")
+		SantaRoom.post.show()
+		box++
+	}
+	else {
+		printMessage("방금이 마지막 편지였던 것 같다.")
+	}
+}
+
+
+SantaRoom.desk = new Object(SantaRoom, 'desk', 'desk_SantaRoom.png') //책상
+SantaRoom.desk.resize(450)
+SantaRoom.desk.locate(260, 300)
+SantaRoom.desk.lock()
+SantaRoom.desk.onClick = function(){
+	if (this.id.isLocked()){
+		printMessage("뭘 만들지 아직 모르는걸")
+	}
+	else{	
+		Game.move(DeskView)
+		printMessage("레시피가 필요해")
+	}
+}
+
+SantaRoom.armchair =new Object(SantaRoom, 'armchair', 'armchair.png')
+SantaRoom.armchair.resize(350)
+SantaRoom.armchair.locate(260, 520)
+SantaRoom.armchair.onClick = function(){
+		printMessage("쉬고 싶지만 시간이 없다. 얼른 선물을 만들자")
+}
+
+SantaRoom.santahat =new Object(SantaRoom, 'santahat', 'santahat2.png')
+SantaRoom.santahat.resize(130)
+SantaRoom.santahat.locate(360, 380)
+
+
+SantaRoom.santabag =new Object(SantaRoom, 'santabag', 'santabag_SantaRoom.png') //산타가방
+SantaRoom.santabag.resize(260)
+SantaRoom.santabag.locate(690, 320)
+SantaRoom.santabag.onClick = function(){
+		printMessage("올해도 바쁘겠다. 부지런히 일하자.")
+}
+
+SantaRoom.coin =new Object(SantaRoom, 'coin', 'coin.png')//동전
+SantaRoom.coin.resize(30)
+SantaRoom.coin.locate(690, 630)
+SantaRoom.coin.hide()
+SantaRoom.coin.onClick = function(){
+	SantaRoom.coin.pick()
+}
+
+var luck = 0
+SantaRoom.rug =new Object(SantaRoom, 'rug', 'rug_SantaRoom.png') //카펫
+SantaRoom.rug.resize(520)
+SantaRoom.rug.locate(690, 530)
+SantaRoom.rug.onClick = function(){
+	if (luck == 0){
+		printMessage("행운의 100원!")
+		SantaRoom.coin.show()
+		luck++
+	}
+	else {
+		printMessage("더 이상 아무 것도 없다.")
+	}
+}
+
+SantaRoom.present1 =new Object(SantaRoom, 'present1', 'present1_SantaRoom.png') //선물1
+SantaRoom.present1.resize(250)
+SantaRoom.present1.locate(550, 460)
+SantaRoom.present1.onClick = function(){
+		printMessage("올해도 바쁘겠다. 부지런히 일하자.")
+}
+
+
+SantaRoom.present2 =new Object(SantaRoom, 'present2', 'present2_SantaRoom.png') //선물2
+SantaRoom.present2.resize(240)
+SantaRoom.present2.locate(820, 460)
+SantaRoom.present2.onClick = function(){
+		printMessage("올해도 바쁘겠다. 부지런히 일하자.")
+}
+
+SantaRoom.book1 =new Object(SantaRoom, 'book1', 'book1_SantaRoom.png') //책1
+SantaRoom.book1.resize(70)
+SantaRoom.book1.locate(1010, 580)
+SantaRoom.book1.onClick = function(){
+		showImageViewer("bookimage.jpg")
+}
+
+
+SantaRoom.book2 =new Object(SantaRoom, 'book2', 'book2_SantaRoom.png') //책2
+SantaRoom.book2.resize(150)
+SantaRoom.book2.locate(1160, 540)
+
+SantaRoom.teddybear =new Object(SantaRoom, 'teddybear', 'teddybear_SantaRoom.png')
+SantaRoom.teddybear.resize(100)
+SantaRoom.teddybear.locate(260, 180)
+SantaRoom.teddybear.hide()
+
+//SantaRoom2
+SantaRoom2.prev =new Object(SantaRoom2, 'prev', 'prev.png') //왼쪽 화살표
+SantaRoom2.prev.resize(90)
+SantaRoom2.prev.locate(30, 340)
+SantaRoom2.prev.onClick = function() { 
+	Game.move(SantaRoom)
+}
+
+SantaRoom2.rug2 =new Object(SantaRoom2, 'rug2', 'rug-2.png') //카펫
+SantaRoom2.rug2.resize(500)
+SantaRoom2.rug2.locate(640, 520)
+
+SantaRoom2.door1 =new Door(SantaRoom2, 'door1', 'close door-right.png', 'open door-right.png', Minigame) //문
+SantaRoom2.door1.resize(200)
+SantaRoom2.door1.locate(640, 220)
+SantaRoom2.door1.onClick = function() {	
+	if (!this.id.isLocked() && this.id.isClosed()){
+		this.id.open()
+	}
+	else if (this.id.isOpened()){
+		if (this.connectedTo !== undefined){
+			Game.move(this.connectedTo)
+            printMessage("빠르게 화살표를 눌러 시내로 이동하자")
+		}
+		else {
+			Game.end()
+		}
+	}	
+}
+
+//DeskView
+DeskView.sewing =new Object(DeskView, 'sewing', 'sewing.png')
+DeskView.sewing.resize(450)
+DeskView.sewing.locate(1000, 150)
+DeskView.sewing.onClick = function(){
+		printMessage("드르르르륵")
+}
+
+DeskView.return =new Object(DeskView, 'return', 'return.png')
+DeskView.return.resize(130)
+DeskView.return.locate(640, 650)
+DeskView.return.onClick = function(){
+		Game.move(SantaRoom)
+}
+
+DeskView.pincushion =new Object(DeskView, 'pincushion', 'pincushion.png') //바늘꽂이
+DeskView.pincushion.resize(100)
+DeskView.pincushion.locate(400, 150)
+
+DeskView.glue =new Object(DeskView, 'glue', 'glue.png')//풀
+DeskView.glue.resize(60)
+DeskView.glue.locate(540, 130)
+DeskView.glue.onClick = function(){
+	Game.move(BearEnding)
+	game.setTimer(4, 1, '초')
+	printMessage("인형은 풀로 붙여 만드는 게 아니야!")
+	game.setGameoverMessage("매뉴얼을 잘 따르셨어야죠.")
+}
+
+//곰 엔딩
+BearEnding.badbear2 = new Object(BearEnding, 'badbear2', 'badbear2.png')
+BearEnding.badbear2.resize(540)
+BearEnding.badbear2.locate(860, 320)
+
+
+BearEnding.crysanta =new Object(BearEnding, 'crysanta', 'cryingsanta.png')
+BearEnding.crysanta.resize(300)
+BearEnding.crysanta.locate(350, 350)
+
+
+DeskView.scissors =new Object(DeskView, 'scissors', 'scissors.png') // 가위
+DeskView.scissors.resize(80)
+DeskView.scissors.locate(450, 300)
+
+DeskView.needle =new Object(DeskView, 'needle', 'needle.png')
+DeskView.needle.resize(100)
+DeskView.needle.locate(660, 160)
+
+//곰인형
+DeskView.bearhead =new Object(DeskView, 'bearhead', 'bearhead.png')
+DeskView.bearhead.resize(170)
+DeskView.bearhead.locate(640, 320)
+DeskView.bearhead.onClick = function(){
+	DeskView.bearhead.pick()
+}
+
+
+DeskView.bearleg =new Object(DeskView, 'bearleg', 'bearleg.png')
+DeskView.bearleg.resize(170)
+DeskView.bearleg.locate(240, 220)
+DeskView.bearleg.onClick = function(){
+	DeskView.bearleg.pick()
+	SantaRoom.next.unlock()
+}
+
+DeskView.bearstomach =new Object(DeskView, 'bearstomach', 'bearstomach.png')
+DeskView.bearstomach.resize(170)
+DeskView.bearstomach.locate(1080, 380)
+DeskView.bearstomach.onClick = function(){
+	DeskView.bearstomach.pick()
+}
+
+DeskView.beararm =new Object(DeskView, 'beararm', 'beararm.png')
+DeskView.beararm.resize(170)
+DeskView.beararm.locate(140, 350)
+DeskView.beararm.onClick = function(){
+	DeskView.beararm.pick()
+}
+
+//장식들
+DeskView.ribbon1 =new Object(DeskView, 'ribbon1', 'ribbon1.png')
+DeskView.ribbon1.resize(100)
+DeskView.ribbon1.locate(800, 380)
+
+DeskView.ribbon2 =new Object(DeskView, 'ribbon2', 'ribbon2.png')
+DeskView.ribbon2.resize(30)
+DeskView.ribbon2.locate(340, 400)
+
+DeskView.ribbon4 =new Object(DeskView, 'ribbon4', 'ribbon4.png')
+DeskView.ribbon4.resize(150)
+DeskView.ribbon4.locate(640, 460)
+
+//곰인형 조합
+DeskView.noleg =new Object(DeskView, 'noleg', 'noleg.png')
+DeskView.noleg.hide()
+DeskView.nohead =new Object(DeskView, 'nohead', 'nohead.png')
+DeskView.nohead.hide()
+
+Game.combination(DeskView.beararm, DeskView.bearstomach, DeskView.noleg)
+Game.combination(DeskView.noleg, DeskView.bearleg, DeskView.nohead)
+Game.combination(DeskView.nohead, DeskView.bearhead, SantaRoom.teddybear)
+Game.combination(SantaRoom.post2, SantaRoom.post3, SantaRoom.post)
+
 
 /*            Miniagame            */
-Minigame = new Room('Minigame', '밤하늘.png')
 var santaX = 250
 var santaY = 170
 var i = 0
+var cnt = 0
 Minigame.santa = new Object(Minigame, 'santa', '산타썰매.png')
 Minigame.santa.resize(300)
 Minigame.santa.locate(santaX, 170)
@@ -265,10 +531,17 @@ Minigame.button = new Object(Minigame, 'button', '버튼.png')
 Minigame.button.resize(150)
 Minigame.button.locate(650, 620)
 Minigame.button.onClick = function () {
-    i += 15
-    Minigame.santa.locate(santaX + i, santaY)
-    if (Minigame.santa.getX() > 1280) {
-        Game.move(Town)
+    cnt++
+    if (cnt == 1){
+    game.setTimer(10, 1, "초")
+    game.setGameoverMessage("너무 늦어서 12월 26일이 되어버렸다...")
+    }
+    else {
+        i += 15
+        Minigame.santa.locate(santaX + i, santaY)
+        if (Minigame.santa.getX() > 1280) {
+            Game.move(Town)
+        }
     }
 }
 
@@ -844,4 +1117,4 @@ choiceroom2.text2.locate(640,200)
 
 
 // 게임 시작
-Game.start(Livingroom, "Merry Christmas!")
+Game.start(startroom, "Merry Christmas!")
