@@ -188,29 +188,12 @@ Item.member('isHanded', function () {
 })
 
 
-////////// Decoration Definition
-
-//function Decoration(room, name, image) {
-//    Object.call(this, room, name, image)
-//}
-//// inherited from Object
-//Decoration.prototype = new Object()
-
-//Decoration.member('onClick', function () {
-//    printMessage("트리 장식이다.")
-//})
-//Decoration.member('onDrag', function (x, y) {
-//    if (direction == "Right") {
-//        this.id.locate(x, y)
-//    }
-//})
-
-
 
 
 
 
 // 방 구성
+Minigame = new Room('Minigame', '밤하늘.png')
 Livingroom = new Room('Livingroom', '거실.png')
 bedroom = new Room('bedroom', 'bedroomwall.png')  
 kid_room = new Room('kid_room', 'baby_background.jpg')
@@ -632,18 +615,15 @@ Livingroom.door2.onClick = function () { // door를 클릭했을 때
 */
 
 
-/*   열쇠   */
-Livingroom.key = new Object(Livingroom, 'key', '열쇠.png')
-Livingroom.key.resize(100)
-Livingroom.key.locate(500, 350)
-Livingroom.key.hide() // 숨김
-
 
 
 /*     벽난로     */
 Livingroom.fireplace = new Object(Livingroom, 'fireplace', '벽난로_켜짐.png')
 Livingroom.fireplace.resize(270)
 Livingroom.fireplace.locate(550, 280)
+Livingroom.fireplace.onClick = function () {
+    printMessage("따뜻한 벽난로다.")
+}
 
 
 
@@ -655,58 +635,12 @@ Livingroom.sofa.onClick = function () {
     printMessage("안락한 느낌의 소파다")
 }
 
-// 드래그 모션 direction - Up, Down, Left, Right
-
-Livingroom.sofa.onDrag = function (direction) {
-    if (direction == "Right" && Livingroom.sofa.move) {
-        printMessage("소파에 뭔가 있다")
-        Livingroom.sofa.moveX(100)
-        Livingroom.sofa.moveY(-40)
-        Livingroom.sofa.move = false // 이후에는 더 이상 움직이지 않도록 함
-        Livingroom.key.show()  // 열쇠 발견
-    }
-}
-
-Livingroom.key.onClick = function () {
-    printMessage("열쇠를 얻었다")
-    Livingroom.key.pick()
-}
-
-
- /*     트리 장식     */
- Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
- Livingroom.tool1.resize(100)
- Livingroom.tool1.locate(350, 600)
-
- Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
- Livingroom.tool2.resize(100)
- Livingroom.tool2.locate(450, 620)
-
- Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
- Livingroom.tool3.resize(100)
- Livingroom.tool3.locate(750, 600)
-
- Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
- Livingroom.tool4.resize(100)
- Livingroom.tool4.locate(850, 600)
-
- Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
- Livingroom.tool5.resize(70)
- Livingroom.tool5.locate(950, 550)
-
- Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
- Livingroom.tool6.resize(100)
- Livingroom.tool6.locate(1050, 500)
-
- Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
- Livingroom.tool7.resize(100)
- Livingroom.tool7.locate(550, 600)
 
 
 
-
- /*     트리      */
+/*     트리      */
 var tree_grass = true
+var tool = 0
 Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
 Livingroom.tree.resize(400)
 Livingroom.tree.locate(820, 300)
@@ -717,8 +651,124 @@ Livingroom.tree.onDrag = function (direction) {
     }
 }
 Livingroom.tree.onClick = function () {
-    printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
+    if (tool == 7) {
+        printMessage("뭔가 2%가 부족한 느낌이 든다.")
+    }
+    else if (tool == 8) {
+        printMessage("완벽한 트리다!")
+    }
+    else {
+        printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
+    }
+
+    if (kid_room.star.isHanded()) {
+        tool = 8
+        Livingroom.star1.show()
+        printMessage("2%를 채웠다!")
+    }
 }
+
+
+ /*     트리 장식     */
+// 드래그 모션 direction - Up, Down, Left, Right
+ Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
+ Livingroom.tool1.resize(100)
+Livingroom.tool1.locate(350, 600)
+Livingroom.tool1.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool1.locate(820, 320)
+        tool++
+    }
+}
+
+ Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
+ Livingroom.tool2.resize(100)
+Livingroom.tool2.locate(450, 620)
+Livingroom.tool2.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool2.locate(720, 400)
+        tool++
+    }
+}
+
+ Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
+ Livingroom.tool3.resize(100)
+Livingroom.tool3.locate(750, 600)
+Livingroom.tool3.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool3.locate(885, 260)
+        tool++
+    }
+}
+
+ Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
+ Livingroom.tool4.resize(100)
+Livingroom.tool4.locate(850, 600)
+Livingroom.tool4.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool4.locate(820, 195)
+        tool++
+    }
+}
+
+ Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
+ Livingroom.tool5.resize(70)
+Livingroom.tool5.locate(950, 550)
+Livingroom.tool5.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool5.locate(840, 420)
+        tool++
+    }
+}
+
+ Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
+ Livingroom.tool6.resize(100)
+Livingroom.tool6.locate(1050, 500)
+Livingroom.tool6.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool6.locate(930, 410)
+        tool++
+    }
+}
+
+ Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
+ Livingroom.tool7.resize(100)
+Livingroom.tool7.locate(550, 600)
+Livingroom.tool7.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool7.locate(735, 270)
+        tool++
+    }
+}
+
+
+
+/*   열쇠   */
+Livingroom.key = new Object(Livingroom, 'key', '열쇠.png')
+Livingroom.key.resize(60)
+Livingroom.key.locate(825, 600)
+Livingroom.key.hide() // 숨김
+Livingroom.key.onClick = function () {
+    printMessage("열쇠를 얻었다.")
+    Livingroom.key.pick()
+}
+
+
+
+
+/*    별 장식    */
+Livingroom.star1 = new Object(Livingroom, 'star1', '장식8.png')
+Livingroom.star1.resize(100)
+Livingroom.star1.locate(825, 80)
+Livingroom.star1.hide()
+Livingroom.star1.onClick = function () {
+    Livingroom.key.show()
+    printMessage("열쇠가 나타났다.")
+}
+
+
+
+
 
 
  /*     풀     */
@@ -732,7 +782,7 @@ Livingroom.grass.onClick = function () {
     Livingroom.grass.pick()
 }
 
-// // 트리 장식들을 트리로 드래그해서 꾸밀 수 있는 기능 필요
+
 
 
 // /*    트리 그림    */
