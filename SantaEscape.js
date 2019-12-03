@@ -842,6 +842,7 @@ kid_room.window.lock()
 kid_room.window.onClick = function () {
     if(bedroom.telescope.isHanded()) {
        kid_room.window.unlock()
+       printMessage("보인다!")
     }
 	
     if(kid_room.window.isLocked()) {
