@@ -682,7 +682,7 @@ Livingroom.tree.onClick = function () {
         printMessage("뭔가 2%가 부족한 느낌이 든다.")
     }
     else if (tool == 8) {
-        printMessage("완벽한 트리다!")
+        printMessage("완벽한 트리다.")
     }
     else {
         printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
@@ -691,7 +691,7 @@ Livingroom.tree.onClick = function () {
     if (kid_room.star.isHanded()) {
         tool = 8
         Livingroom.star1.show()
-        printMessage("2%를 채웠다!")
+        printMessage("트리를 완성했다!")
     }
 }
 
@@ -812,19 +812,6 @@ Livingroom.grass.onClick = function () {
 
 
 
-// /*    트리 그림    */
-// kid_room.treepicture = new Item(kid_room, 'treepicture', '트리그림.png')
-// kid_room.treepicture.resize(50)
-// kid_room.treepicture.locate(800, 280)
-// kid_room.treepicture.setDescription("예쁜 트리가 그려져 있는 그림. 물감이 쏟아졌던 흔적이 있다.")
-
-// kid_room.treepicture.onClick = function () {
-//     printMessage("그림을 발견했다!")
-//     kid_room.treepicture.pick()
-// }
-// 아이 방의 특정 공간에 숨겨져 있으면 좋겠음....
-
-
 
 
 
@@ -851,9 +838,19 @@ kid_room.carpet.onClick = function () {
 kid_room.window = new Object(kid_room, 'window', 'baby_window.png')
 kid_room.window.resize(400)
 kid_room.window.locate(500, 140)
+kid_room.window.lock()
 kid_room.window.onClick = function () {
-    printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
-    Game.move(outside)
+    if(bedroom.telescope.isHanded()) {
+       kid_room.window.unlock()
+    }
+	
+    if(kid_room.window.isLocked()) {
+       printMessage("저 멀리 무언가가 있는 것 같은데, 너무 멀어서 보이지 않는다.")
+    }
+    else{
+       printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
+       Game.move(outside)
+    }
 }
 
 
