@@ -9,6 +9,7 @@ Game.start = function (room, welcome) {
     printMessage(welcome)
 }
 Game.end = function (msg) {
+    // 팡파레 말고 다른 음원으로 바꿀 것!(캐롤이나..)
     playSound("fanfare.wav")
     game.setClearMessage(msg)
     game.clear()
@@ -109,6 +110,9 @@ Object.member('pick', function () {
 Object.member('isPicked', function () {
     return this.id.isPicked()
 })
+Object.member('isHanded', function () {
+    return Game.handItem() == this.id
+})
 
 
 //////// Door Definition
@@ -182,9 +186,6 @@ Item.prototype = new Object()
 
 Item.member('onClick', function () {
     this.id.pick()
-})
-Item.member('isHanded', function () {
-    return Game.handItem() == this.id
 })
 
 
@@ -653,7 +654,7 @@ Livingroom.tree.onDrag = function (direction) {
 }
 Livingroom.tree.onClick = function () {
     if (tool == 7) {
-        printMessage("뭔가 2%가 부족한 느낌이 든다.")
+        printMessage("뭔가 2%가 부족한 느낌이다. 중요한 게 빠진 것 같다.")
     }
     else if (tool == 8) {
         printMessage("완벽한 트리다!")
@@ -707,7 +708,7 @@ Livingroom.tool3.onDrag = function (direction) {
 Livingroom.tool4.locate(850, 600)
 Livingroom.tool4.onDrag = function (direction) {
     if (direction == "Up") {
-        Livingroom.tool4.locate(820, 195)
+        Livingroom.tool4.locate(820, 185)
         tool++
     }
 }
@@ -782,22 +783,6 @@ Livingroom.grass.onClick = function () {
     printMessage("풀을 얻었다.")
     Livingroom.grass.pick()
 }
-
-
-
-
-// /*    트리 그림    */
-// kid_room.treepicture = new Item(kid_room, 'treepicture', '트리그림.png')
-// kid_room.treepicture.resize(50)
-// kid_room.treepicture.locate(800, 280)
-// kid_room.treepicture.setDescription("예쁜 트리가 그려져 있는 그림. 물감이 쏟아졌던 흔적이 있다.")
-
-// kid_room.treepicture.onClick = function () {
-//     printMessage("그림을 발견했다!")
-//     kid_room.treepicture.pick()
-// }
-// 아이 방의 특정 공간에 숨겨져 있으면 좋겠음....
-
 
 
 
@@ -967,7 +952,7 @@ kid_room.treasureChest.onClick = function () {
     }
 }
 
-kid_room.star = new Object(kid_room, 'star', '장식8.png')
+kid_room.star = new Item(kid_room, 'star', '장식8.png')
 kid_room.star.hide()
 kid_room.star.setDescription("트리 장식이다.")
 
