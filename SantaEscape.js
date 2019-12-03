@@ -540,7 +540,7 @@ Minigame.button.onClick = function () {
 Town = new Room('Town', '마을.png')
 Town.house1 = new Object(Town, 'house1', '집_1.png')
 Town.house1.resize(150)
-Town.house1.locate(500, 400)
+Town.house1.locate(500, 360)
 Town.house1.onClick = function () {
     playSound("황당.wav")
     Game.over("빈집털이범으로 오해받았다...\n 그레이스의 집은 어디?")
@@ -548,7 +548,7 @@ Town.house1.onClick = function () {
 
 Town.house2 = new Object(Town, 'house2', '집_2.png')
 Town.house2.resize(150)
-Town.house2.locate(500, 570)
+Town.house2.locate(300, 530)
 Town.house2.onClick = function () {
     playSound("황당.wav")
     Game.over("여긴 티미의 집이었다...\n 그레이스의 집은 어디?")
@@ -556,7 +556,7 @@ Town.house2.onClick = function () {
 
 Town.house4 = new Object(Town, 'house4', '집_4.png')
 Town.house4.resize(150)
-Town.house4.locate(700, 420)
+Town.house4.locate(900, 380)
 Town.house4.onClick = function () {
     playSound("아모르파티.wav")
     Game.over("밤샘파티가 벌어지는 집이었다...\n 하마터면 같이 놀 뻔")
@@ -564,22 +564,23 @@ Town.house4.onClick = function () {
 
 Town.door1 = new Door(Town, 'door1', '집_3.png', '집_3.png', Livingroom)
 Town.door1.resize(150)
-Town.door1.locate(700, 560)
+Town.door1.locate(700, 520)
 Town.door1.onClick = function () {
-    if (!this.id.isLocked() && this.id.isClosed()) {
-        this.id.open()
-    }
-    else if (this.id.isOpened()) {
-        if (this.connectedTo !== undefined) {
-            Game.move(this.connectedTo)
-            printMessage("무사히 그레이스의 집에 도착했다!")
-        }
-        else {
-            Game.end()
-        }
-    }
+        Game.move(this.connectedTo)
+        printMessage("무사히 그레이스의 집에 도착했다!")
 }
 
+Town.hospital = new Object(Town, 'hospital', 'hospital.png')
+Town.hospital.resize(150)
+Town.hospital.locate(700, 380)
+
+Town.bakery = new Object(Town, 'bakery', 'bakery.png')
+Town.bakery.resize(170)
+Town.bakery.locate(500, 530)
+
+Town.school = new Object(Town, 'school', 'school.png')
+Town.school.resize(160)
+Town.school.locate(900, 520)
 
 
 
@@ -1167,4 +1168,4 @@ choiceroom2.text2.locate(640,200)
 
 
 // 게임 시작
-Game.start(startroom, "Merry Christmas!")
+Game.start(Town, "")
