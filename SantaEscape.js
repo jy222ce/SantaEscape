@@ -60,6 +60,13 @@ Object.member('resize', function (width) {
 Object.member('setDescription', function (description) {
     this.id.setItemDescription(description)
 })
+Object.member('upDrag', function (x, y) {
+    this.id.onDrag = function (direction) {
+        if (direction == "Up") {
+            this.room.id.locateObject(this.id, x, y)
+        }
+    }
+})
 
 Object.member('getX', function () {
     return this.id.getX()
@@ -186,31 +193,25 @@ Item.member('onClick', function () {
 
 
 /////// Decoration Definition
-function Decoration(room, name, image, size, x, y, dx, dy) {    // dx: after drag -> x
-    Object.call(this, room, name, image, function () {
-        this.id.resize(size)
-        this.id.locate(x, y)
-    })
-
-    this.size = size
-    this.x = x
-    this.y = y
-    this.dx = dx
-    this.dy = dy
-    //Object.resize.call(this, size)
-    //Object.locate.call(this, x, y)
+function Decoration(room, name, image) {    // dx: after drag -> x
+    Object.call(this, room, name, image)
 }
 // inherited from Object
 Decoration.prototype = new Object()
 
-//Decoration.prototype.resize(size)
-//Decoration.prototype.locate(x, y)
-
-Decoration.member('onDrag', function (direction) {
+Decoration.member('set', function(size, x, y, dx, dy){
+    this.id.resize(size)
+    this.id.locate(x, y)
+    this.id.upDrag(dx, dy)
     tool++
-    this.id.locate(dx, dy)
 })
 
+//Livingroom.tool5.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool5.locate(840, 420)
+//        tool++
+//    }
+//}
 
 
 
@@ -728,13 +729,26 @@ Livingroom.tree.onClick = function () {
 
 
 // 트리 장식
-Livingroom.tool1 = new Decoration(Livingroom, 'tool1', '장식1.png', 100, 350, 600, 820, 320)
-Livingroom.tool2 = new Decoration(Livingroom, 'tool2', '장식2.png', 100, 450, 620, 720, 400)
-Livingroom.tool3 = new Decoration(Livingroom, 'tool3', '장식3.png', 100, 750, 600, 885, 260)
-Livingroom.tool4 = new Decoration(Livingroom, 'tool4', '장식4.png', 100, 850, 600, 820, 185)
-Livingroom.tool5 = new Decoration(Livingroom, 'tool5', '장식5.png', 70, 950, 550, 840, 420)
-Livingroom.tool6 = new Decoration(Livingroom, 'tool6', '장식6.png', 100, 1050, 500, 930, 410)
-Livingroom.tool7 = new Decoration(Livingroom, 'tool7', '장식7.png', 100, 550, 600, 735, 270)
+Livingroom.tool1 = new Decoration(Livingroom, 'tool1', '장식1.png')
+Livingroom.tool1.set(100, 350, 600, 820, 320)
+
+Livingroom.tool2 = new Decoration(Livingroom, 'tool2', '장식2.png')
+Livingroom.tool2.set(100, 450, 620, 720, 400)
+
+Livingroom.tool3 = new Decoration(Livingroom, 'tool3', '장식3.png')
+Livingroom.tool3.set(100, 750, 600, 885, 260)
+
+Livingroom.tool4 = new Decoration(Livingroom, 'tool4', '장식4.png')
+Livingroom.tool4.set(100, 850, 600, 820, 185)
+
+Livingroom.tool5 = new Decoration(Livingroom, 'tool5', '장식5.png')
+Livingroom.tool5.set(70, 950, 550, 840, 420)
+
+Livingroom.tool6 = new Decoration(Livingroom, 'tool6', '장식6.png')
+Livingroom.tool6.set(100, 1050, 500, 930, 410)
+
+Livingroom.tool7 = new Decoration(Livingroom, 'tool7', '장식7.png')
+Livingroom.tool7.set(100, 550, 600, 735, 270)
 
 
 // 클래스 쓰기 전
