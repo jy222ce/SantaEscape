@@ -2,6 +2,7 @@ Function.prototype.member = function (name, value) {
     this.prototype[name] = value
 }
 
+
 //////// Game Definition
 function Game() { }
 Game.start = function (room, welcome) {
@@ -26,8 +27,8 @@ Game.combination = function (object1, object2, object3) {
     game.makeCombination(object1.id, object2.id, object3.id)
 }
 
-//////// Room Definition
 
+//////// Room Definition
 function Room(name, background) {
     this.name = name
     this.background = background
@@ -37,8 +38,8 @@ Room.member('setRoomLight', function (intensity) {
     this.id.setRoomLight(intensity)
 })
 
-//////// Object Definition
 
+//////// Object Definition
 function Object(room, name, image) {
     this.room = room
     this.name = name
@@ -59,13 +60,6 @@ Object.member('resize', function (width) {
 })
 Object.member('setDescription', function (description) {
     this.id.setItemDescription(description)
-})
-Object.member('upDrag', function (x, y) {
-    this.id.onDrag = function (direction) {
-        if (direction == "Up") {
-            this.room.id.locateObject(this.id, x, y)
-        }
-    }
 })
 
 Object.member('getX', function () {
@@ -193,25 +187,30 @@ Item.member('onClick', function () {
 
 
 /////// Decoration Definition
-function Decoration(room, name, image) {    // dx: after drag -> x
+function Decoration(room, name, image, dx, dy) {    // dx: after drag -> x
     Object.call(this, room, name, image)
+
+    this.room = room
+    this.dx = dx
+    this.dy = dy
 }
 // inherited from Object
 Decoration.prototype = new Object()
 
-Decoration.member('set', function(size, x, y, dx, dy){
-    this.id.resize(size)
-    this.id.locate(x, y)
-    this.id.upDrag(dx, dy)
-    tool++
-})
-
-//Livingroom.tool5.onDrag = function (direction) {
+//Decoration.prototype.onDrag = function (direction) {
 //    if (direction == "Up") {
-//        Livingroom.tool5.locate(840, 420)
+//        //printMessage("오!!")
+//        this.room.id.locateObject(this.id, dx, dy)
 //        tool++
 //    }
 //}
+
+Decoration.member('set', function(size, x, y) {
+    this.id.setWidth(size)
+    this.id.locate(x, y)
+})
+
+
 
 
 
@@ -246,7 +245,6 @@ playSound('start.wav')
 startroom.door1 = new Door(startroom, 'door1', 'startbutton.png', 'startbutton.png', SantaRoom)
 startroom.door1.resize(130)
 startroom.door1.locate(640, 590)
-
 
 startroom.door1.onClick = function(){
 	Game.move(this.connectedTo)
@@ -729,98 +727,68 @@ Livingroom.tree.onClick = function () {
 
 
 // 트리 장식
-Livingroom.tool1 = new Decoration(Livingroom, 'tool1', '장식1.png')
-Livingroom.tool1.set(100, 350, 600, 820, 320)
+Livingroom.tool1 = new Decoration(Livingroom, 'tool1', '장식1.png', 820, 320)
+Livingroom.tool1.set(100, 350, 600)
+Livingroom.tool1.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool1.locate(820, 320)
+        tool++
+    }
+}
 
-Livingroom.tool2 = new Decoration(Livingroom, 'tool2', '장식2.png')
-Livingroom.tool2.set(100, 450, 620, 720, 400)
+Livingroom.tool2 = new Decoration(Livingroom, 'tool2', '장식2.png', 720, 400)
+Livingroom.tool2.set(100, 450, 620)
+Livingroom.tool2.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool2.locate(720, 400)
+        tool++
+    }
+}
 
-Livingroom.tool3 = new Decoration(Livingroom, 'tool3', '장식3.png')
-Livingroom.tool3.set(100, 750, 600, 885, 260)
+Livingroom.tool3 = new Decoration(Livingroom, 'tool3', '장식3.png', 885, 260)
+Livingroom.tool3.set(100, 750, 600)
+Livingroom.tool3.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool3.locate(885, 260)
+        tool++
+    }
+}
 
-Livingroom.tool4 = new Decoration(Livingroom, 'tool4', '장식4.png')
-Livingroom.tool4.set(100, 850, 600, 820, 185)
+Livingroom.tool4 = new Decoration(Livingroom, 'tool4', '장식4.png', 820, 185)
+Livingroom.tool4.set(100, 850, 600)
+Livingroom.tool4.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool4.locate(820, 185)
+        tool++
+    }
+}
 
-Livingroom.tool5 = new Decoration(Livingroom, 'tool5', '장식5.png')
-Livingroom.tool5.set(70, 950, 550, 840, 420)
+Livingroom.tool5 = new Decoration(Livingroom, 'tool5', '장식5.png', 840, 420)
+Livingroom.tool5.set(70, 950, 550)
+Livingroom.tool5.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool5.locate(840, 420)
+        tool++
+    }
+}
 
-Livingroom.tool6 = new Decoration(Livingroom, 'tool6', '장식6.png')
-Livingroom.tool6.set(100, 1050, 500, 930, 410)
+Livingroom.tool6 = new Decoration(Livingroom, 'tool6', '장식6.png', 930, 410)
+Livingroom.tool6.set(100, 1050, 500)
+Livingroom.tool6.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool6.locate(930, 410)
+        tool++
+    }
+}
 
-Livingroom.tool7 = new Decoration(Livingroom, 'tool7', '장식7.png')
-Livingroom.tool7.set(100, 550, 600, 735, 270)
-
-
-// 클래스 쓰기 전
-// Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
-// Livingroom.tool1.resize(100)
-//Livingroom.tool1.locate(350, 600)
-//Livingroom.tool1.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool1.locate(820, 320)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
-// Livingroom.tool2.resize(100)
-//Livingroom.tool2.locate(450, 620)
-//Livingroom.tool2.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool2.locate(720, 400)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
-// Livingroom.tool3.resize(100)
-//Livingroom.tool3.locate(750, 600)
-//Livingroom.tool3.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool3.locate(885, 260)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
-// Livingroom.tool4.resize(100)
-//Livingroom.tool4.locate(850, 600)
-//Livingroom.tool4.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool4.locate(820, 185)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
-// Livingroom.tool5.resize(70)
-//Livingroom.tool5.locate(950, 550)
-//Livingroom.tool5.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool5.locate(840, 420)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
-// Livingroom.tool6.resize(100)
-//Livingroom.tool6.locate(1050, 500)
-//Livingroom.tool6.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool6.locate(930, 410)
-//        tool++
-//    }
-//}
-
-// Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
-// Livingroom.tool7.resize(100)
-//Livingroom.tool7.locate(550, 600)
-//Livingroom.tool7.onDrag = function (direction) {
-//    if (direction == "Up") {
-//        Livingroom.tool7.locate(735, 270)
-//        tool++
-//    }
-//}
+Livingroom.tool7 = new Decoration(Livingroom, 'tool7', '장식7.png', 735, 270)
+Livingroom.tool7.set(100, 550, 600)
+Livingroom.tool7.onDrag = function (direction) {
+    if (direction == "Up") {
+        Livingroom.tool7.locate(735, 270)
+        tool++
+    }
+}
 
 
 // 열쇠
