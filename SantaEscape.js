@@ -830,6 +830,7 @@ Livingroom.star1.onClick = function () {
 Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
 Livingroom.grass.resize(50)
 Livingroom.grass.locate(920, 280)
+Livingroom.grass.hide()
 Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
 Livingroom.grass.onClick = function () {
     printMessage("풀을 얻었다.")
