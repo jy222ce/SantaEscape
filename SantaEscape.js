@@ -187,6 +187,12 @@ Item.prototype = new Object()
 Item.member('onClick', function () {
     this.id.pick()
 })
+<<<<<<< HEAD
+=======
+// Item.member('isHanded', function () {
+//     return Game.handItem() == this.id
+// })
+>>>>>>> master
 
 
 
@@ -223,6 +229,10 @@ startroom.door1.onClick = function(){
 	Game.move(this.connectedTo)
 }
 
+
+
+
+//SantaRoom
 SantaRoom.next =new Object(SantaRoom, 'next', 'next.png') //책장
 SantaRoom.next.resize(90)
 SantaRoom.next.locate(1250, 340)
@@ -304,13 +314,14 @@ SantaRoom.santahat =new Object(SantaRoom, 'santahat', 'santahat2.png')
 SantaRoom.santahat.resize(130)
 SantaRoom.santahat.locate(360, 380)
 
-
 SantaRoom.santabag =new Object(SantaRoom, 'santabag', 'santabag_SantaRoom.png') //산타가방
 SantaRoom.santabag.resize(260)
 SantaRoom.santabag.locate(690, 320)
 SantaRoom.santabag.onClick = function(){
 		printMessage("올해도 바쁘겠다. 부지런히 일하자.")
 }
+
+
 
 SantaRoom.coin =new Object(SantaRoom, 'coin', 'coin.png')//동전
 SantaRoom.coin.resize(30)
@@ -367,35 +378,6 @@ SantaRoom.teddybear.resize(100)
 SantaRoom.teddybear.locate(260, 180)
 SantaRoom.teddybear.hide()
 
-//SantaRoom2
-SantaRoom2.prev =new Object(SantaRoom2, 'prev', 'prev.png') //왼쪽 화살표
-SantaRoom2.prev.resize(90)
-SantaRoom2.prev.locate(30, 340)
-SantaRoom2.prev.onClick = function() { 
-	Game.move(SantaRoom)
-}
-
-SantaRoom2.rug2 =new Object(SantaRoom2, 'rug2', 'rug-2.png') //카펫
-SantaRoom2.rug2.resize(500)
-SantaRoom2.rug2.locate(640, 520)
-
-SantaRoom2.door1 =new Door(SantaRoom2, 'door1', 'close door-right.png', 'open door-right.png', Minigame) //문
-SantaRoom2.door1.resize(200)
-SantaRoom2.door1.locate(640, 220)
-SantaRoom2.door1.onClick = function() {	
-	if (!this.id.isLocked() && this.id.isClosed()){
-		this.id.open()
-	}
-	else if (this.id.isOpened()){
-		if (this.connectedTo !== undefined){
-			Game.move(this.connectedTo)
-            printMessage("빠르게 화살표를 눌러 시내로 이동하자")
-		}
-		else {
-			Game.end()
-		}
-	}	
-}
 
 //DeskView
 DeskView.sewing =new Object(DeskView, 'sewing', 'sewing.png')
@@ -425,6 +407,47 @@ DeskView.glue.onClick = function(){
 	printMessage("인형은 풀로 붙여 만드는 게 아니야!")
 	game.setGameoverMessage("매뉴얼을 잘 따르셨어야죠.")
 }
+
+//SantaRoom2
+SantaRoom2.prev =new Object(SantaRoom2, 'prev', 'prev.png') //왼쪽 화살표
+SantaRoom2.prev.resize(90)
+SantaRoom2.prev.locate(30, 340)
+SantaRoom2.prev.onClick = function() { 
+	Game.move(SantaRoom)
+}
+
+SantaRoom2.rug2 =new Object(SantaRoom2, 'rug2', 'rug-2.png') //카펫
+SantaRoom2.rug2.resize(500)
+SantaRoom2.rug2.locate(640, 520)
+
+SantaRoom2.door1 =new Object(SantaRoom2, 'door1', 'close door-right.png') //문
+SantaRoom2.door1.resize(200)
+SantaRoom2.door1.locate(640, 220)
+SantaRoom2.door1.lock()
+SantaRoom2.door1.onClick = function() {	
+	if (SantaRoom2.door1.isLocked() && SantaRoom.teddybear.isHanded()){
+        this.id.unlock()
+        printMessage("선물이 준비되었다! 출발하자")
+        SantaRoom2.door1.setSprite("open door-right.png")
+    }
+	else if (this.id.isClosed()){
+		Game.move(Minigame)
+        printMessage("빠르게 화살표를 눌러 시내로 이동하자")
+    }
+    else {
+        printMessage("선물을 모두 만들어야 한다.")
+    }
+}
+
+SantaRoom2.cabinet =new Object(SantaRoom2, 'cabinet', 'cabinet.png')
+SantaRoom2.cabinet.resize(300)
+SantaRoom2.cabinet.locate(980, 220)
+SantaRoom2.cabinet.onClick = function() {
+
+    printMessage("신발을 신었다. 진짜 준비 완료!")
+  
+}
+
 
 //곰 엔딩
 BearEnding.badbear2 = new Object(BearEnding, 'badbear2', 'badbear2.png')
@@ -623,8 +646,14 @@ Livingroom.door2.onClick = function () { // door를 클릭했을 때
 Livingroom.fireplace = new Object(Livingroom, 'fireplace', '벽난로_켜짐.png')
 Livingroom.fireplace.resize(270)
 Livingroom.fireplace.locate(550, 280)
+Livingroom.fireplace.close()
 Livingroom.fireplace.onClick = function () {
-    printMessage("따뜻한 벽난로다.")
+    if(this.id.isClosed()){
+    printMessage("따뜻한 벽난로다. 아직 할일이 끝나지 않아 여기로 나갈 수 없다.")
+    }
+    if (this.id.isOpened()) {
+        Game.end("올해도 메리 크리스마스!")
+    }
 }
 
 
@@ -657,7 +686,7 @@ Livingroom.tree.onClick = function () {
         printMessage("뭔가 2%가 부족한 느낌이다. 중요한 게 빠진 것 같다.")
     }
     else if (tool == 8) {
-        printMessage("완벽한 트리다!")
+        printMessage("완벽한 트리다.")
     }
     else {
         printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
@@ -666,7 +695,7 @@ Livingroom.tree.onClick = function () {
     if (kid_room.star.isHanded()) {
         tool = 8
         Livingroom.star1.show()
-        printMessage("2%를 채웠다!")
+        printMessage("트리를 완성했다!")
     }
 }
 
@@ -787,6 +816,12 @@ Livingroom.grass.onClick = function () {
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> master
 
 
 
@@ -810,17 +845,40 @@ kid_room.carpet.onClick = function () {
 kid_room.window = new Object(kid_room, 'window', 'baby_window.png')
 kid_room.window.resize(400)
 kid_room.window.locate(500, 140)
+kid_room.window.lock()
 kid_room.window.onClick = function () {
-    printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
-    Game.move(outside)
+    if(bedroom.telescope.isHanded()) {
+       kid_room.window.unlock()
+       printMessage("보인다!")
+    }
+	
+    if(kid_room.window.isLocked()) {
+       printMessage("저 멀리 무언가가 있는 것 같은데, 너무 멀어서 보이지 않는다.")
+    }
+    else{
+       printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
+       Game.move(outside)
+    }
 }
+
 
 kid_room.bed = new Object(kid_room, 'bed', 'bed.png')
 kid_room.bed.resize(460)
 kid_room.bed.locate(260, 315)
 kid_room.bed.onClick = function () {
-    printMessage("아이가 자고있다.")
+    if (SantaRoom.teddybear.isHanded()){
+        kid_room.teddybear2.show()
+        printMessage("포비 옆에 그레이스의 선물을 뒀다.")
+        Livingroom.fireplace.open()
+
+    }
+    else printMessage("아이가 자고있다.")
 }
+
+kid_room.teddybear2 = new Object(kid_room, 'teddybear2', 'teddybear_SantaRoom.png')
+kid_room.teddybear2.resize(90)
+kid_room.teddybear2.locate(325, 320)
+kid_room.teddybear2.hide()
 
 kid_room.bear = new Object(kid_room, 'bear', 'bear.png')
 kid_room.bear.resize(100)
@@ -1153,4 +1211,4 @@ choiceroom2.text2.locate(640,200)
 
 
 // 게임 시작
-Game.start(Town, "")
+Game.start(startroom, "게임을 시작하려면 Start 버튼을 누르세요.")
