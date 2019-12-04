@@ -9,8 +9,6 @@ Game.start = function (room, welcome) {
     printMessage(welcome)
 }
 Game.end = function (msg) {
-    // 팡파레 말고 다른 음원으로 바꿀 것!(캐롤이나..)
-    playSound("fanfare.wav")
     game.setClearMessage(msg)
     game.clear()
 }
@@ -116,7 +114,6 @@ Object.member('isHanded', function () {
 
 
 //////// Door Definition
-
 function Door(room, name, closedImage, openedImage, connectedTo) {
     Object.call(this, room, name, closedImage)
 
@@ -150,7 +147,6 @@ Door.member('onClose', function () {
 
 
 //////// Keypad Definition
-
 function Keypad(room, name, image, password, callback) {
     Object.call(this, room, name, image)
 
@@ -176,8 +172,8 @@ function DoorLock(room, name, image, password, door, message) {
 // inherited from Object
 DoorLock.prototype = new Keypad()
 
-/////// Item Definition
 
+/////// Item Definition
 function Item(room, name, image) {
     Object.call(this, room, name, image)
 }
@@ -187,12 +183,35 @@ Item.prototype = new Object()
 Item.member('onClick', function () {
     this.id.pick()
 })
-<<<<<<< HEAD
-=======
-// Item.member('isHanded', function () {
-//     return Game.handItem() == this.id
-// })
->>>>>>> master
+
+
+/////// Decoration Definition
+function Decoration(room, name, image, size, x, y, dx, dy) {    // dx: after drag -> x
+    Object.call(this, room, name, image, function () {
+        this.id.resize(size)
+        this.id.locate(x, y)
+    })
+
+    this.size = size
+    this.x = x
+    this.y = y
+    this.dx = dx
+    this.dy = dy
+    //Object.resize.call(this, size)
+    //Object.locate.call(this, x, y)
+}
+// inherited from Object
+Decoration.prototype = new Object()
+
+//Decoration.prototype.resize(size)
+//Decoration.prototype.locate(x, y)
+
+Decoration.member('onDrag', function (direction) {
+    tool++
+    this.id.locate(dx, dy)
+})
+
+
 
 
 
@@ -217,7 +236,10 @@ BearEnding = new Room('BearEnding', 'bearending.png')
 
 
 
-/*  startroom */
+
+
+
+/*       startroom        */
 playSound('start.wav')
 
 startroom.door1 = new Door(startroom, 'door1', 'startbutton.png', 'startbutton.png', SantaRoom)
@@ -232,7 +254,8 @@ startroom.door1.onClick = function(){
 
 
 
-//SantaRoom
+
+/*       SantaRoom        */
 SantaRoom.next =new Object(SantaRoom, 'next', 'next.png') //책장
 SantaRoom.next.resize(90)
 SantaRoom.next.locate(1250, 340)
@@ -524,6 +547,13 @@ Game.combination(DeskView.nohead, DeskView.bearhead, SantaRoom.teddybear)
 Game.combination(SantaRoom.post2, SantaRoom.post3, SantaRoom.post)
 
 
+
+
+
+
+
+
+
 /*            Miniagame            */
 var santaX = 250
 var santaY = 170
@@ -614,42 +644,39 @@ Town.school.locate(900, 520)
 
 
 /*           Livingroom            */
-//Livingroom = new Room('Livingroom', '거실.png')
 Livingroom.setRoomLight(0.8) // 방 밝기 
 
+// 아이방 문
 Livingroom.door1 = new Door(Livingroom, 'door1', 'close door-left.png', 'open door-left.png', kid_room)
 Livingroom.door1.resize(190)
 Livingroom.door1.locate(180, 210)
 
+// 부모님방 문
 Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', bedroom)
 Livingroom.door2.resize(190)
 Livingroom.door2.locate(1100, 210)
-/*Livingroom.door2.lock() 나중에 다시 lock걸기!!
-
-Livingroom.door2.onClick = function () { // door를 클릭했을 때
-    if (Livingroom.key.isHanded() && this.id.isClosed()) {
-        this.id.open() // key를 사용해서 door의 상태를 open으로 바꿈
-    }
-    else if (this.id.isOpened()) { // door가 opened 상태이면
-        game.move(bedroom) // 부모님방으로 이동
-    }
-    else if (this.id.isLocked()) { // door가 locked 상태이면
-        printMessage("잠겨있다") // 메시지 출력
-    }
-}
-*/
+//Livingroom.door2.lock()
+//Livingroom.door2.onClick = function () { // door를 클릭했을 때
+//    if (Livingroom.key.isHanded() && this.id.isClosed()) {
+//        this.id.open() // key를 사용해서 door의 상태를 open으로 바꿈
+//    }
+//    else if (this.id.isOpened()) { // door가 opened 상태이면
+//        game.move(bedroom) // 부모님방으로 이동
+//    }
+//    else if (this.id.isLocked()) { // door가 locked 상태이면
+//        printMessage("잠겨있다") // 메시지 출력
+//    }
+//}
 
 
-
-
-/*     벽난로     */
+// 벽난로
 Livingroom.fireplace = new Object(Livingroom, 'fireplace', '벽난로_켜짐.png')
 Livingroom.fireplace.resize(270)
 Livingroom.fireplace.locate(550, 280)
 Livingroom.fireplace.close()
 Livingroom.fireplace.onClick = function () {
     if(this.id.isClosed()){
-    printMessage("따뜻한 벽난로다. 아직 할일이 끝나지 않아 여기로 나갈 수 없다.")
+    printMessage("굴뚝과 이어진 벽난로다.\n 아직 할일이 끝나지 않아 여기로 나갈 수 없다.")
     }
     if (this.id.isOpened()) {
         Game.end("올해도 메리 크리스마스!")
@@ -657,8 +684,7 @@ Livingroom.fireplace.onClick = function () {
 }
 
 
-
-/*      소파      */
+// 소파
 Livingroom.sofa = new Object(Livingroom, 'sofa', '소파.png')
 Livingroom.sofa.resize(450)
 Livingroom.sofa.locate(400, 430)
@@ -667,10 +693,9 @@ Livingroom.sofa.onClick = function () {
 }
 
 
-
-
-/*     트리      */
+// 트리
 var tree_grass = true
+var tree_decorating = true
 var tool = 0
 Livingroom.tree = new Object(Livingroom, 'tree', '트리.png')
 Livingroom.tree.resize(400)
@@ -684,6 +709,14 @@ Livingroom.tree.onDrag = function (direction) {
 Livingroom.tree.onClick = function () {
     if (tool == 7) {
         printMessage("뭔가 2%가 부족한 느낌이다. 중요한 게 빠진 것 같다.")
+
+        if (kid_room.star.isHanded() && tree_decorating) {
+            tool++
+            playSound("fanfare.wav")
+            Livingroom.star1.show()
+            printMessage("트리를 완성했다!")
+            tree_decorating = false
+        }
     }
     else if (tool == 8) {
         printMessage("완벽한 트리다.")
@@ -691,118 +724,123 @@ Livingroom.tree.onClick = function () {
     else {
         printMessage("산타로서 트리를 꾸며야 할 것 같은 사명감이 든다.")
     }
-
-    if (kid_room.star.isHanded()) {
-        tool = 8
-        Livingroom.star1.show()
-        printMessage("트리를 완성했다!")
-    }
 }
 
 
- /*     트리 장식     */
-// 드래그 모션 direction - Up, Down, Left, Right
- Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
- Livingroom.tool1.resize(100)
-Livingroom.tool1.locate(350, 600)
-Livingroom.tool1.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool1.locate(820, 320)
-        tool++
-    }
-}
-
- Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
- Livingroom.tool2.resize(100)
-Livingroom.tool2.locate(450, 620)
-Livingroom.tool2.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool2.locate(720, 400)
-        tool++
-    }
-}
-
- Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
- Livingroom.tool3.resize(100)
-Livingroom.tool3.locate(750, 600)
-Livingroom.tool3.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool3.locate(885, 260)
-        tool++
-    }
-}
-
- Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
- Livingroom.tool4.resize(100)
-Livingroom.tool4.locate(850, 600)
-Livingroom.tool4.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool4.locate(820, 185)
-        tool++
-    }
-}
-
- Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
- Livingroom.tool5.resize(70)
-Livingroom.tool5.locate(950, 550)
-Livingroom.tool5.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool5.locate(840, 420)
-        tool++
-    }
-}
-
- Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
- Livingroom.tool6.resize(100)
-Livingroom.tool6.locate(1050, 500)
-Livingroom.tool6.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool6.locate(930, 410)
-        tool++
-    }
-}
-
- Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
- Livingroom.tool7.resize(100)
-Livingroom.tool7.locate(550, 600)
-Livingroom.tool7.onDrag = function (direction) {
-    if (direction == "Up") {
-        Livingroom.tool7.locate(735, 270)
-        tool++
-    }
-}
+// 트리 장식
+Livingroom.tool1 = new Decoration(Livingroom, 'tool1', '장식1.png', 100, 350, 600, 820, 320)
+Livingroom.tool2 = new Decoration(Livingroom, 'tool2', '장식2.png', 100, 450, 620, 720, 400)
+Livingroom.tool3 = new Decoration(Livingroom, 'tool3', '장식3.png', 100, 750, 600, 885, 260)
+Livingroom.tool4 = new Decoration(Livingroom, 'tool4', '장식4.png', 100, 850, 600, 820, 185)
+Livingroom.tool5 = new Decoration(Livingroom, 'tool5', '장식5.png', 70, 950, 550, 840, 420)
+Livingroom.tool6 = new Decoration(Livingroom, 'tool6', '장식6.png', 100, 1050, 500, 930, 410)
+Livingroom.tool7 = new Decoration(Livingroom, 'tool7', '장식7.png', 100, 550, 600, 735, 270)
 
 
+// 클래스 쓰기 전
+// Livingroom.tool1 = new Object(Livingroom, 'tool1', '장식1.png')
+// Livingroom.tool1.resize(100)
+//Livingroom.tool1.locate(350, 600)
+//Livingroom.tool1.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool1.locate(820, 320)
+//        tool++
+//    }
+//}
 
-/*   열쇠   */
+// Livingroom.tool2 = new Object(Livingroom, 'tool2', '장식2.png')
+// Livingroom.tool2.resize(100)
+//Livingroom.tool2.locate(450, 620)
+//Livingroom.tool2.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool2.locate(720, 400)
+//        tool++
+//    }
+//}
+
+// Livingroom.tool3 = new Object(Livingroom, 'tool3', '장식3.png')
+// Livingroom.tool3.resize(100)
+//Livingroom.tool3.locate(750, 600)
+//Livingroom.tool3.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool3.locate(885, 260)
+//        tool++
+//    }
+//}
+
+// Livingroom.tool4 = new Object(Livingroom, 'tool4', '장식4.png')
+// Livingroom.tool4.resize(100)
+//Livingroom.tool4.locate(850, 600)
+//Livingroom.tool4.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool4.locate(820, 185)
+//        tool++
+//    }
+//}
+
+// Livingroom.tool5 = new Object(Livingroom, 'tool5', '장식5.png')
+// Livingroom.tool5.resize(70)
+//Livingroom.tool5.locate(950, 550)
+//Livingroom.tool5.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool5.locate(840, 420)
+//        tool++
+//    }
+//}
+
+// Livingroom.tool6 = new Object(Livingroom, 'tool6', '장식6.png')
+// Livingroom.tool6.resize(100)
+//Livingroom.tool6.locate(1050, 500)
+//Livingroom.tool6.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool6.locate(930, 410)
+//        tool++
+//    }
+//}
+
+// Livingroom.tool7 = new Object(Livingroom, 'tool7', '장식7.png')
+// Livingroom.tool7.resize(100)
+//Livingroom.tool7.locate(550, 600)
+//Livingroom.tool7.onDrag = function (direction) {
+//    if (direction == "Up") {
+//        Livingroom.tool7.locate(735, 270)
+//        tool++
+//    }
+//}
+
+
+// 열쇠
+var get_key = false
 Livingroom.key = new Object(Livingroom, 'key', '열쇠.png')
 Livingroom.key.resize(60)
 Livingroom.key.locate(825, 600)
 Livingroom.key.hide() // 숨김
+Livingroom.key.setDescription("열쇠다.")
 Livingroom.key.onClick = function () {
     printMessage("열쇠를 얻었다.")
     Livingroom.key.pick()
+    get_key = true
 }
 
 
-
-
-/*    별 장식    */
+// 별 장식
 Livingroom.star1 = new Object(Livingroom, 'star1', '장식8.png')
 Livingroom.star1.resize(100)
 Livingroom.star1.locate(825, 80)
 Livingroom.star1.hide()
 Livingroom.star1.onClick = function () {
-    Livingroom.key.show()
-    printMessage("열쇠가 나타났다.")
+    if (get_key) {
+        printMessage("트리의 완성은 별이지.")
+    }
+    else {
+        playSound("click.wav")
+        Livingroom.key.show()
+        printMessage("열쇠가 나타났다.")
+    }
 }
 
 
-
-
-
-
- /*     풀     */
+ // 풀
 Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
 Livingroom.grass.resize(50)
 Livingroom.grass.locate(920, 280)
@@ -816,19 +854,13 @@ Livingroom.grass.onClick = function () {
 
 
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> master
-
 
 
 
 
 
 /*           kid_room           */
+// 아이방
 kid_room.setRoomLight(0.8)
 
 kid_room.door = new Door(kid_room, 'door', 'close door-left.png', 'open door-left.png', Livingroom)
@@ -847,17 +879,18 @@ kid_room.window.resize(400)
 kid_room.window.locate(500, 140)
 kid_room.window.lock()
 kid_room.window.onClick = function () {
-    if(bedroom.telescope.isHanded()) {
-       kid_room.window.unlock()
-       printMessage("보인다!")
+    if (bedroom.telescope.isHanded()) {
+        kid_room.window.unlock()
+        printMessage("보인다!")
     }
-	
-    if(kid_room.window.isLocked()) {
-       printMessage("저 멀리 무언가가 있는 것 같은데, 너무 멀어서 보이지 않는다.")
+
+    if (kid_room.window.isLocked()) {
+        printMessage("저 멀리 무언가가 있는 것 같은데, 너무 멀어서 보이지 않는다.")
     }
-    else{
-       printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
-       Game.move(outside)
+    else {
+        printMessage("눈이 오고있다. 빛나는 별 아래 우리집 루돌프들이 보인다!")
+        Game.move(outside)
+        kid_room.window.lock()
     }
 }
 
@@ -908,12 +941,14 @@ kid_room.blockB.onClick = function () {
         printMessage("잠겨있는 상자다. 뭔가 들어있다.")
         showKeypad('telephone', this.password, this.callback)
     }
+    else if (get_TCkey) {
+        printMessage("열린 상자다.")
+    }
     else {
         kid_room.blockB.setSprite('opened B block.jpg')
         kid_room.treasureChestKey.show()
         printMessage("열쇠가 들어있다.")
     }
-
 }
 
 kid_room.blockC = new Object(kid_room, 'blockC', 'C block.png')
@@ -922,6 +957,7 @@ kid_room.blockC.onClick = function () {
     printMessage("비어있는 상자다.")
 }
 
+var get_TCkey = false
 kid_room.treasureChestKey = new Item(kid_room, 'treasureChestKey', 'Treasure Chest Key.png')
 kid_room.treasureChestKey.resize(30)
 kid_room.treasureChestKey.locate(851, 93)
@@ -929,6 +965,7 @@ kid_room.treasureChestKey.hide()
 kid_room.treasureChestKey.onClick = function () {
     printMessage("장난감 열쇠를 얻었다.")
     kid_room.treasureChestKey.pick()
+    get_TCkey = true
 }
 kid_room.treasureChestKey.setDescription("장난감 열쇠다.")
 
@@ -1032,6 +1069,7 @@ kid_room.cutted_star.onClick = function () {
 
 
 /*          outside          */
+// 아이방 창문 밖
 outside.arrow = new Object(outside, 'arrow', 'down_arrow.png')
 outside.arrow.resize(100)
 outside.arrow.locate(640, 650)
@@ -1043,7 +1081,7 @@ outside.arrow.onClick = function () {
 var clear = 0
 outside.rudolph1 = new Object(outside, 'rudolph1', '루돌프_썰매.png')
 outside.rudolph1.resize(80)
-outside.rudolph1.locate(900, 120)
+outside.rudolph1.locate(990, 120)
 
 // 큰 루돌프
 outside.rudolph2 = new Object(outside, 'rudolph2', '루돌프_썰매.png')
@@ -1061,6 +1099,8 @@ outside.rudolph1.onClick = function () {
 }
 
 outside.rudolph2.onClick = function () {
+    // 팡파레 말고 다른 음원으로 바꿀 것!(루돌프 사슴 코, 썰매를 타고..)///////////////////////////////////////
+    playSound("fanfare.wav")
     Game.end("Mission Clear!!")
 }
 
@@ -1068,8 +1108,9 @@ outside.rudolph2.onClick = function () {
 
 
 
+
 /*        bedroom         */
-//부모님방 bedroom
+// 부모님방
 bedroom.door1 = new Door(bedroom, 'door1', 'doorlock.png', 'dooropen.png', Livingroom)
 bedroom.door1.resize(230)
 bedroom.door1.locate(1040, 218)
@@ -1203,7 +1244,7 @@ choiceroom2.text2=new Object(choiceroom2,'text2','choiceroom2.png')
 choiceroom2.text2.resize(500)
 choiceroom2.text2.locate(640,200)
 
-//선택지방3
+
 
 
 
@@ -1211,4 +1252,4 @@ choiceroom2.text2.locate(640,200)
 
 
 // 게임 시작
-Game.start(startroom, "게임을 시작하려면 Start 버튼을 누르세요.")
+Game.start(Livingroom, "게임을 시작하려면 Start 버튼을 누르세요.")
