@@ -651,16 +651,22 @@ Livingroom.door1.resize(190)
 Livingroom.door1.locate(180, 210)
 
 // 부모님방 문
-Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', bedroom)
+Livingroom.door2 = new Object(Livingroom, 'door2', 'close door-left.png')
 Livingroom.door2.resize(190)
 Livingroom.door2.locate(1100, 210)
 Livingroom.door2.lock()
 Livingroom.door2.onClick = function () { // door를 클릭했을 때
-    if (Livingroom.key.isHanded() && Livingroom.door2.isClosed()) {
-        Livingroom.door2.open() 
-        game.move(bedroom)// key를 사용해서 door의 상태를 open으로 바꿈
+    if (Livingroom.key.isHanded() && Livingroom.door2.isLocked()) {
+        Livingroom.door2.unlock()
+        Livingroom.door2.open()
+        printMessage("문이 열렸다! 들어가보자")
+        Livingroom.door2.setSprite('open door-left.png')
+       // key를 사용해서 door의 상태를 open으로 바꿈
     }
-    else if (Livingroom.door2.isLocked()) { // door가 locked 상태이면
+    else if (Livingroom.door2.isOpened()) { // door가 locked 상태이면
+        Game.move(bedroom)
+    }
+    else {
         printMessage("잠겨있다") // 메시지 출력
     }
 }
@@ -709,7 +715,7 @@ Livingroom.tree.onClick = function () {
 
         if (kid_room.star.isHanded() && tree_decorating) {
             tool++
-            playSound("fanfare.wav")
+            playSound("캐롤.wav")
             Livingroom.star1.show()
             printMessage("트리를 완성했다!")
             tree_decorating = false
@@ -824,7 +830,6 @@ Livingroom.star1.onClick = function () {
 Livingroom.grass = new Item(Livingroom, 'grass', 'grass.png')
 Livingroom.grass.resize(50)
 Livingroom.grass.locate(920, 280)
-Livingroom.grass.hide()
 Livingroom.grass.setDescription("루돌프들이 좋아하는 풀이다.")
 Livingroom.grass.onClick = function () {
     printMessage("풀을 얻었다.")
@@ -1232,4 +1237,4 @@ choiceroom2.text2.locate(640,200)
 
 
 // 게임 시작
-Game.start(Livingroom, "게임을 시작하려면 Start 버튼을 누르세요.")
+Game.start(startroom, "게임을 시작하려면 Start 버튼을 누르세요.")
