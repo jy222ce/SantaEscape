@@ -654,18 +654,16 @@ Livingroom.door1.locate(180, 210)
 Livingroom.door2 = new Door(Livingroom, 'door2', 'close door-left.png', 'open door-left.png', bedroom)
 Livingroom.door2.resize(190)
 Livingroom.door2.locate(1100, 210)
-//Livingroom.door2.lock()
-//Livingroom.door2.onClick = function () { // door를 클릭했을 때
-//    if (Livingroom.key.isHanded() && this.id.isClosed()) {
-//        this.id.open() // key를 사용해서 door의 상태를 open으로 바꿈
-//    }
-//    else if (this.id.isOpened()) { // door가 opened 상태이면
-//        game.move(bedroom) // 부모님방으로 이동
-//    }
-//    else if (this.id.isLocked()) { // door가 locked 상태이면
-//        printMessage("잠겨있다") // 메시지 출력
-//    }
-//}
+Livingroom.door2.lock()
+Livingroom.door2.onClick = function () { // door를 클릭했을 때
+    if (Livingroom.key.isHanded() && Livingroom.door2.isClosed()) {
+        Livingroom.door2.open() 
+        game.move(bedroom)// key를 사용해서 door의 상태를 open으로 바꿈
+    }
+    else if (Livingroom.door2.isLocked()) { // door가 locked 상태이면
+        printMessage("잠겨있다") // 메시지 출력
+    }
+}
 
 
 // 벽난로
