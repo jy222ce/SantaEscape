@@ -715,7 +715,7 @@ Livingroom.tree.onClick = function () {
 
         if (kid_room.star.isHanded() && tree_decorating) {
             tool++
-            playSound("캐롤.wav")
+            playSound("fanfare.wav")
             Livingroom.star1.show()
             printMessage("트리를 완성했다!")
             tree_decorating = false
@@ -1085,7 +1085,7 @@ outside.rudolph1.onClick = function () {
 
 outside.rudolph2.onClick = function () {
     // 팡파레 말고 다른 음원으로 바꿀 것!(루돌프 사슴 코, 썰매를 타고..)///////////////////////////////////////
-    playSound("fanfare.wav")
+    playSound("캐롤.wav")
     Game.end("Mission Clear!!")
 }
 
